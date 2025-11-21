@@ -584,21 +584,6 @@ for i, ticker in enumerate(selected_tickers):
             st.dataframe(institutional_holders.head(5), use_container_width=True, hide_index=True)
         else:
             st.info("No institutional ownership data available.")
-
-        # PDF Report Generation
-        st.markdown("---")
-        st.subheader("📄 Generate PDF Report")
-        if st.button(f"Download Full Report for {ticker}", key=f"pdf_report_{ticker}"):
-            with st.spinner("Generating PDF report..."):
-                pdf_buffer = generate_pdf_report(ticker, info, hist, news, analyzed_news, recommendation, target_price, risk_rating, beta, adjusted_sentiment, social_buzz, buzz_mentions)
-                st.download_button(
-                    label="Click to Download PDF",
-                    data=pdf_buffer,
-                    file_name=f"{ticker}_stock_report.pdf",
-                    mime="application/pdf",
-                    key=f"download_pdf_{ticker}"
-                )
-                st.success("PDF report generated successfully!")
         
         # Fundamentals
         col1, col2, col3, col4 = st.columns(4)
