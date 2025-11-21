@@ -249,18 +249,7 @@ if selected_tickers:
     share_ticker = selected_tickers[0]
     share_url = f"?ticker={share_ticker}"
     st.sidebar.code(share_url, language=None)
-    st.sidebar.caption("Share this URL parameter to link directly to this stock")
-
-# Check for URL parameters on load
-try:
-    query_params = st.query_params
-    if "ticker" in query_params:
-        url_ticker = query_params["ticker"].upper()
-        if url_ticker not in selected_tickers:
-            selected_tickers = [url_ticker]
-            st.info(f"📍 Loaded {url_ticker} from shared link!")
-except:
-    pass
+    st.sidebar.caption("Copy and share this URL parameter")
 
 # Data Fetching with Progress
 data = {}
