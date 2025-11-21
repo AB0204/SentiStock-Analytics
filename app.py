@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 import io
 
 # Page Config
-st.set_page_config(page_title="Stock Sentiment Agent", page_icon="📈", layout="wide")
+st.set_page_config(page_title="Trade Smarter, Not Harder: Your Personal AI Stock Agent", page_icon="📈", layout="wide")
 
 # Custom CSS
 st.markdown("""
@@ -538,7 +538,7 @@ for i, ticker in enumerate(selected_tickers):
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; color: #888; padding: 20px;'>
-    <p><strong>Built by Abhi Bhardwaj</strong></p>
+    <p><strong>Built by: Abhi Bhardwaj</strong></p>
     <p>Data: <a href='https://github.com/ranaroussi/yfinance' target='_blank'>yfinance</a> | 
     Sentiment: <a href='https://textblob.readthedocs.io/' target='_blank'>TextBlob</a> | 
     <a href='https://github.com/AB0204/Stock-Agent' target='_blank'>View on GitHub</a></p>
