@@ -5,3 +5,4 @@ typer
 streamlit
 plotly
 pandas-ta
+Pillow

@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 import pandas as pd
 import pandas_ta as ta
 from datetime import datetime, timedelta
+from PIL import Image, ImageDraw, ImageFont
+import io
 
 # Page Config
 st.set_page_config(page_title="Stock Sentiment Agent", page_icon="📈", layout="wide")
@@ -12,29 +14,51 @@ st.set_page_config(page_title="Stock Sentiment Agent", page_icon="📈", layout=
 # Custom CSS
 st.markdown("""
 <style>
+    /* Glassmorphism cards */
     .metric-card {
-        background-color: #1e1e1e;
+        background: rgba(30, 30, 30, 0.7);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        margin-bottom: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+    }
+    
+    /* Enhanced metrics */
+    .stMetric {
+        background: linear-gradient(135deg, #1E1E1E 0%, #2D2D2D 100%);
         padding: 15px;
         border-radius: 10px;
-        border: 1px solid #333;
-        margin-bottom: 10px;
+        border-left: 4px solid #FFD700;
     }
-    .stMetric {
-        background-color: #0e1117;
-        padding: 10px;
-        border-radius: 5px;
+    
+    /* Bullish/Bearish badges */
+    .bullish {
+        color: #00FF88;
+        font-weight: bold;
+        text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
     }
-    .footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: #0e1117;
-        color: #888;
-        text-align: center;
-        padding: 10px;
-        font-size: 12px;
-        border-top: 1px solid #333;
+    
+    .bearish {
+        color: #FF4444;
+        font-weight: bold;
+        text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+    }
+    
+    /* Gold accent for headers */
+    h1, h2, h3 {
+        color: #FFD700 !important;
+    }
+    
+    /* Smooth transitions */
+    * {
+        transition: all 0.3s ease;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -56,6 +80,72 @@ def format_large_number(num):
     if num >= 1_000_000_000: return f"${num/1_000_000_000:.2f}B"
     if num >= 1_000_000: return f"${num/1_000_000:.2f}M"
     return f"${num:.2f}"
+
+def apply_scenario(base_sentiment, scenario):
+    """Apply scenario adjustments to sentiment"""
+    scenarios = {
+        "None": 1.0,
+        "Interest Rates +1%": 0.75,
+        "Tech Acquisition Announced": 1.3,
+        "Global Recession Fear": 0.5,
+        "Earnings Beat Expectation": 1.4,
+        "Supply Chain Disruption": 0.65
+    }
+    return base_sentiment * scenarios.get(scenario, 1.0)
+
+def generate_certificate(ticker, price, recommendation, sentiment_score, pe_ratio, market_cap):
+    """Generate a professional analysis certificate"""
+    # Create image
+    img = Image.new('RGB', (1200, 800), color='#0E1117')
+    draw = ImageDraw.Draw(img)
+    
+    # Try to use default font, fallback to basic if not available
+    try:
+        title_font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 60)
+        header_font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 40)
+        body_font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 30)
+        small_font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 20)
+    except:
+        title_font = header_font = body_font = small_font = ImageFont.load_default()
+    
+    # Gold border
+    draw.rectangle([20, 20, 1180, 780], outline='#FFD700', width=5)
+    draw.rectangle([30, 30, 1170, 770], outline='#FFD700', width=2)
+    
+    # Title
+    draw.text((600, 80), "STOCK ANALYSIS CERTIFICATE", fill='#FFD700', font=title_font, anchor='mm')
+    draw.text((600, 140), f"Analysis Report: {ticker}", fill='#FFFFFF', font=header_font, anchor='mm')
+    
+    # Divider line
+    draw.line([(100, 180), (1100, 180)], fill='#FFD700', width=3)
+    
+    # Main recommendation
+    rec_color = '#00FF88' if 'BUY' in recommendation else '#FF4444' if 'SELL' in recommendation else '#FFD700'
+    draw.text((600, 260), f"RECOMMENDATION: {recommendation}", fill=rec_color, font=header_font, anchor='mm')
+    
+    # Metrics
+    y_pos = 340
+    metrics = [
+        f"Current Price: ${price:.2f}",
+        f"Sentiment Score: {sentiment_score:.2f}",
+        f"P/E Ratio: {pe_ratio}",
+        f"Market Cap: {market_cap}"
+    ]
+    
+    for metric in metrics:
+        draw.text((600, y_pos), metric, fill='#FFFFFF', font=body_font, anchor='mm')
+        y_pos += 50
+    
+    # Footer
+    draw.line([(100, 620), (1100, 620)], fill='#FFD700', width=2)
+    draw.text((600, 670), "Analyzed by Abhi Bhardwaj - Stock Agent", fill='#888888', font=body_font, anchor='mm')
+    draw.text((600, 720), f"Report Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}", fill='#666666', font=small_font, anchor='mm')
+    
+    # Convert to bytes
+    buf = io.BytesIO()
+    img.save(buf, format='PNG')
+    buf.seek(0)
+    return buf
 
 # Sidebar
 with st.sidebar:
@@ -125,15 +215,36 @@ with st.sidebar:
         show_macd = st.checkbox("Show MACD", value=True)
     
     st.markdown("---")
-    st.markdown("### Features")
-    st.markdown("- **Multi-Stock Comparison**")
-    st.markdown("- **Real-time Prices**")
-    st.markdown("- **Sentiment Analysis**")
-    st.markdown("- **Technical Indicators**")
+    st.markdown("### ✨ Features")
+    st.markdown("- 📊 **Multi-Stock Comparison**")
+    st.markdown("- 💰 **Real-time Prices**")
+    st.markdown("- 📰 **Sentiment Analysis**")
+    st.markdown("- 📉 **Technical Indicators**")
+    st.markdown("- 🔮 **Scenario Planning**")
 
 if not selected_tickers:
     st.info("👈 Select or enter a stock ticker to get started!")
     st.stop()
+
+# URL Sharing Feature
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 🔗 Share Analysis")
+if selected_tickers:
+    share_ticker = selected_tickers[0]
+    share_url = f"?ticker={share_ticker}"
+    st.sidebar.code(share_url, language=None)
+    st.sidebar.caption("Share this URL parameter to link directly to this stock")
+
+# Check for URL parameters on load
+try:
+    query_params = st.query_params
+    if "ticker" in query_params:
+        url_ticker = query_params["ticker"].upper()
+        if url_ticker not in selected_tickers:
+            selected_tickers = [url_ticker]
+            st.info(f"📍 Loaded {url_ticker} from shared link!")
+except:
+    pass
 
 # Data Fetching with Progress
 data = {}
@@ -222,13 +333,28 @@ for i, ticker in enumerate(selected_tickers):
             
             status.update(label=f"Analysis complete for {ticker}!", state="complete", expanded=False)
         
+        
         # Fundamentals
         col1, col2, col3, col4 = st.columns(4)
-        with col1: st.metric("Market Cap", format_large_number(info.get('marketCap')))
-        with col2: st.metric("P/E Ratio", f"{info.get('trailingPE', 'N/A')}")
-        with col3: st.metric("52W High", f"${info.get('fiftyTwoWeekHigh', 0):.2f}")
-        with col4: st.metric("Volume", format_large_number(info.get('volume')))
+        current_price = info.get('currentPrice', info.get('regularMarketPrice', 0))
+        with col1: st.metric("Current Price", f"${current_price:.2f}")
+        with col2: st.metric("Market Cap", format_large_number(info.get('marketCap')))
+        with col3: st.metric("P/E Ratio", f"{info.get('trailingPE', 'N/A')}")
+        with col4: st.metric("52W High", f"${info.get('fiftyTwoWeekHigh', 0):.2f}")
 
+        # Scenario Injector 🔮
+        st.markdown("---")
+        st.subheader("🔮 Scenario Planning")
+        scenario_col1, scenario_col2 = st.columns([2, 1])
+        
+        with scenario_col1:
+            selected_scenario = st.selectbox(
+                "What if...",
+                ["None", "Interest Rates +1%", "Tech Acquisition Announced", 
+                 "Global Recession Fear", "Earnings Beat Expectation", "Supply Chain Disruption"],
+                key=f"scenario_{ticker}"
+            )
+        
         # Sentiment
         total_polarity = 0
         analyzed_news = []
@@ -248,16 +374,70 @@ for i, ticker in enumerate(selected_tickers):
             avg_polarity = total_polarity / len(news)
         else:
             avg_polarity = 0
+        
+        # Apply scenario adjustment
+        base_sentiment = avg_polarity
+        adjusted_sentiment = apply_scenario(base_sentiment, selected_scenario)
+        
+        # Generate recommendation
+        if adjusted_sentiment > 0.1:
+            recommendation = "BUY"
+        elif adjusted_sentiment < -0.1:
+            recommendation = "SELL"
+        else:
+            recommendation = "HOLD"
 
-        st.subheader("Sentiment Analysis")
+        with scenario_col2:
+            if selected_scenario != "None":
+                st.metric(
+                    "Scenario Impact",
+                    f"{(adjusted_sentiment - base_sentiment) * 100:.1f}%",
+                    delta=f"Confidence: {abs(adjusted_sentiment) * 100:.0f}%"
+                )
+                st.caption(f"**Adjusted Rec:** {recommendation}")
+            else:
+                st.metric("Base Sentiment", f"{base_sentiment:.2f}")
+
+        st.subheader("📰 News Sentiment Analysis")
+        
+        # News Sentiment Filter
+        if analyzed_news:
+            min_sentiment = st.slider(
+                "Filter news by minimum sentiment score",
+                -1.0, 1.0, -1.0, 0.1,
+                key=f"filter_{ticker}"
+            )
+            filtered_news = [n for n in analyzed_news if n['polarity'] >= min_sentiment]
+            st.caption(f"Showing {len(filtered_news)} of {len(analyzed_news)} articles")
+        else:
+            filtered_news = []
+        
         s_col1, s_col2 = st.columns([1, 3])
         with s_col1:
-            st.markdown(f"## {get_sentiment_label(avg_polarity)}")
-            st.progress((avg_polarity + 1) / 2)
+            st.markdown(f"## {get_sentiment_label(adjusted_sentiment)}")
+            st.progress((adjusted_sentiment + 1) / 2)
         
         with s_col2:
+            # Certificate Download Button
+            cert_buffer = generate_certificate(
+                ticker, 
+                current_price, 
+                recommendation,
+                adjusted_sentiment,
+                info.get('trailingPE', 'N/A'),
+                format_large_number(info.get('marketCap'))
+            )
+            
+            st.download_button(
+                label="📜 Download Analysis Certificate",
+                data=cert_buffer,
+                file_name=f"{ticker}_analysis_certificate.png",
+                mime="image/png",
+                use_container_width=True
+            )
+            
             with st.expander("Latest News & Sentiment Scores", expanded=False):
-                for item in analyzed_news[:5]:
+                for item in filtered_news[:10]:  # Use filtered_news instead of analyzed_news
                     p_score = item['polarity']
                     p_emoji = "🟢" if p_score > 0.1 else "🔴" if p_score < -0.1 else "🟡"
                     st.markdown(f"{p_emoji} **[{item['title']}]({item['link']})**")
