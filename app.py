@@ -230,18 +230,54 @@ with st.sidebar:
     # Stock Selection based on market
     if market == "🇺🇸 US":
         popular_tickers = ["AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "TSLA", "META"]
-        additional_tickers = ["AMD", "INTC", "NFLX", "SPY", "QQQ", "DIS", "COIN", 
-                             "UBER", "SNOW", "PLTR", "PYPL", "SQ", "SHOP", "CRWD",
-                             "V", "JPM", "BAC", "WMT", "KO", "PEP", "NKE"]
+        additional_tickers = [
+            # Tech Giants
+            "AMD", "INTC", "AVGO", "ORCL", "CSCO", "ADBE", "CRM", "NOW",
+            # Growth/Tech
+            "NFLX", "UBER", "SNOW", "PLTR", "CRWD", "DDOG", "ZS", "MDB",
+            # Fintech/Payments
+            "COIN", "PYPL", "SQ", "V", "MA", "AXP",
+            # E-commerce/Retail
+            "SHOP", "WMT", "TGT", "COST", "HD", "LOW",
+            # Finance
+            "JPM", "BAC", "GS", "MS", "C", "WFC", "BLK",
+            # Consumer
+            "KO", "PEP", "MCD", "SBUX", "NKE", "LULU", "DIS",
+            # Healthcare/Pharma
+            "JNJ", "UNH", "PFE", "ABBV", "LLY", "TMO", "DHR",
+            # Energy
+            "XOM", "CVX", "COP", "SLB", "OXY",
+            # Indexes/ETFs
+            "SPY", "QQQ", "IWM", "DIA"
+        ]
         default_ticker = ["TSLA"]
         custom_hint = "e.g. COIN, DIS"
         suffix = ""
         
     elif market == "🇮🇳 India":
         popular_tickers = ["RELIANCE.NS", "TCS.NS", "INFY.NS", "HDFCBANK.NS", "ICICIBANK.NS", "SBIN.NS", "ITC.NS"]
-        additional_tickers = ["WIPRO.NS", "LT.NS", "BHARTIARTL.NS", "TATAMOTORS.NS", "TATASTEEL.NS",
-                             "MARUTI.NS", "HCLTECH.NS", "AXISBANK.NS", "KOTAKBANK.NS", "BAJFINANCE.NS",
-                             "ADANIENT.NS", "HINDALCO.NS", "SUNPHARMA.NS", "ASIANPAINT.NS"]
+        additional_tickers = [
+            # IT Services
+            "WIPRO.NS", "HCLTECH.NS", "TECHM.NS", "LTIM.NS", "PERSISTENT.NS",
+            # Banking & Finance
+            "AXISBANK.NS", "KOTAKBANK.NS", "BAJFINANCE.NS", "INDUSINDBK.NS", "PNBBANK.NS",
+            # Infrastructure & Conglomerates
+            "LT.NS", "ADANIENT.NS", "ADANIPORTS.NS", "GODREJCP.NS",
+            # Automotive
+            "TATAMOTORS.NS", "MARUTI.NS", "M&M.NS", "HEROMOTOCO.NS", "EICHERMOT.NS", "BAJAJ-AUTO.NS",
+            # Metals & Mining
+            "TATASTEEL.NS", "HINDALCO.NS", "JSWSTEEL.NS", "VEDL.NS", "COALINDIA.NS",
+            # Telecom
+            "BHARTIARTL.NS", "IDEA.NS",
+            # Pharma
+            "SUNPHARMA.NS", "DRREDDY.NS", "CIPLA.NS", "DIVISLAB.NS", "BIOCON.NS",
+            # Consumer & FMCG
+            "ASIANPAINT.NS", "HINDUNILVR.NS", "NESTLEIND.NS", "DABUR.NS", "BRITANNIA.NS",
+            # Energy & Power
+            "ONGC.NS", "NTPC.NS", "POWERGRID.NS", "BPCL.NS", "IOC.NS",
+            # Cement
+            "ULTRACEMCO.NS", "GRASIM.NS", "AMBUJACEM.NS"
+        ]
         default_ticker = ["RELIANCE.NS"]
         custom_hint = "e.g. TATAMOTORS.NS"
         suffix = ".NS"
