@@ -127,17 +127,17 @@ def generate_certificate(ticker, price, recommendation, sentiment_score, pe_rati
     
     # Title
     draw.text((600, 80), "STOCK ANALYSIS CERTIFICATE", fill='#FFD700', font=title_font, anchor='mm')
-    draw.text((600, 140), f"Analysis Report: {ticker}", fill='#FFFFFF', font=header_font, anchor='mm')
+    draw.text((600, 150), f"Analysis Report: {ticker}", fill='#FFFFFF', font=header_font, anchor='mm')
     
     # Divider line
-    draw.line([(100, 180), (1100, 180)], fill='#FFD700', width=3)
+    draw.line([(100, 190), (1100, 190)], fill='#FFD700', width=3)
     
     # Main recommendation
     rec_color = '#00FF88' if 'BUY' in recommendation else '#FF4444' if 'SELL' in recommendation else '#FFD700'
-    draw.text((600, 260), f"RECOMMENDATION: {recommendation}", fill=rec_color, font=header_font, anchor='mm')
+    draw.text((600, 280), f"RECOMMENDATION: {recommendation}", fill=rec_color, font=header_font, anchor='mm')
     
     # Metrics
-    y_pos = 340
+    y_pos = 360
     metrics = [
         f"Current Price: ${price:.2f}",
         f"Sentiment Score: {sentiment_score:.2f}",
@@ -150,9 +150,9 @@ def generate_certificate(ticker, price, recommendation, sentiment_score, pe_rati
         y_pos += 50
     
     # Footer
-    draw.line([(100, 620), (1100, 620)], fill='#FFD700', width=2)
-    draw.text((600, 670), "Analyzed by Abhi Bhardwaj - Stock Agent", fill='#888888', font=body_font, anchor='mm')
-    draw.text((600, 720), f"Report Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}", fill='#666666', font=small_font, anchor='mm')
+    draw.line([(100, 640), (1100, 640)], fill='#FFD700', width=2)
+    draw.text((600, 690), "Analyzed by Abhi Bhardwaj - Stock Agent", fill='#888888', font=body_font, anchor='mm')
+    draw.text((600, 740), f"Report Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}", fill='#666666', font=small_font, anchor='mm')
     
     # Convert to bytes
     buf = io.BytesIO()
