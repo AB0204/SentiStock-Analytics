@@ -178,25 +178,64 @@ with st.sidebar:
     # Market Selection
     market = st.radio(
         "Select Market",
-        ["🇺🇸 US Stocks", "🇮🇳 Indian Stocks"],
-        index=0
+        ["🇺🇸 US", "🇮🇳 India", "🇬🇧 UK", "🇩🇪 Germany", "🇯🇵 Japan", "🇨🇦 Canada", "🇦🇺 Australia"],
+        index=0,
+        horizontal=True
     )
     
     # Stock Selection based on market
-    if market == "🇺🇸 US Stocks":
+    if market == "🇺🇸 US":
         popular_tickers = ["AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "TSLA", "META"]
         additional_tickers = ["AMD", "INTC", "NFLX", "SPY", "QQQ", "DIS", "COIN", 
                              "UBER", "SNOW", "PLTR", "PYPL", "SQ", "SHOP", "CRWD",
                              "V", "JPM", "BAC", "WMT", "KO", "PEP", "NKE"]
         default_ticker = ["TSLA"]
         custom_hint = "e.g. COIN, DIS"
-    else:  # Indian Stocks
+        suffix = ""
+        
+    elif market == "🇮🇳 India":
         popular_tickers = ["RELIANCE.NS", "TCS.NS", "INFY.NS", "HDFCBANK.NS", "ICICIBANK.NS", "SBIN.NS", "ITC.NS"]
         additional_tickers = ["WIPRO.NS", "LT.NS", "BHARTIARTL.NS", "TATAMOTORS.NS", "TATASTEEL.NS",
                              "MARUTI.NS", "HCLTECH.NS", "AXISBANK.NS", "KOTAKBANK.NS", "BAJFINANCE.NS",
                              "ADANIENT.NS", "HINDALCO.NS", "SUNPHARMA.NS", "ASIANPAINT.NS"]
         default_ticker = ["RELIANCE.NS"]
         custom_hint = "e.g. TATAMOTORS.NS"
+        suffix = ".NS"
+        
+    elif market == "🇬🇧 UK":
+        popular_tickers = ["HSBA.L", "BP.L", "SHEL.L", "ULVR.L", "AZN.L", "GSK.L", "DGE.L"]
+        additional_tickers = ["BATS.L", "RIO.L", "LSEG.L", "NG.L", "BARC.L", "LLOY.L", "VOD.L"]
+        default_ticker = ["HSBA.L"]
+        custom_hint = "e.g. BP.L"
+        suffix = ".L"
+        
+    elif market == "🇩🇪 Germany":
+        popular_tickers = ["SAP.DE", "SIE.DE", "ALV.DE", "DTE.DE", "VOW3.DE", "BAS.DE", "MBG.DE"]
+        additional_tickers = ["BMW.DE", "ADS.DE", "DB1.DE", "DAI.DE", "EOAN.DE"]
+        default_ticker = ["SAP.DE"]
+        custom_hint = "e.g. BMW.DE"
+        suffix = ".DE"
+        
+    elif market == "🇯🇵 Japan":
+        popular_tickers = ["7203.T", "6758.T", "9984.T", "6861.T", "8306.T", "7267.T", "9433.T"]
+        additional_tickers = ["6902.T", "6954.T", "8035.T", "4063.T", "7974.T"]
+        default_ticker = ["7203.T"]
+        custom_hint = "e.g. 6758.T (Sony)"
+        suffix = ".T"
+        
+    elif market == "🇨🇦 Canada":
+        popular_tickers = ["RY.TO", "TD.TO", "SHOP.TO", "ENB.TO", "CNQ.TO", "BMO.TO", "BNS.TO"]
+        additional_tickers = ["CP.TO", "TRP.TO", "SU.TO", "CNR.TO", "MFC.TO"]
+        default_ticker = ["SHOP.TO"]
+        custom_hint = "e.g. TD.TO"
+        suffix = ".TO"
+        
+    else:  # Australia
+        popular_tickers = ["BHP.AX", "CBA.AX", "NAB.AX", "WBC.AX", "CSL.AX", "ANZ.AX", "WES.AX"]
+        additional_tickers = ["RIO.AX", "FMG.AX", "WOW.AX", "TLS.AX", "MQG.AX"]
+        default_ticker = ["BHP.AX"]
+        custom_hint = "e.g. CBA.AX"
+        suffix = ".AX"
     
     selected_tickers = st.multiselect(
         "Select Stocks", 
@@ -207,9 +246,9 @@ with st.sidebar:
     custom_ticker = st.text_input(f"Or type a ticker ({custom_hint})")
     if custom_ticker:
         custom_ticker = custom_ticker.upper()
-        # Auto-add .NS suffix for Indian stocks if not present
-        if market == "🇮🇳 Indian Stocks" and not custom_ticker.endswith(('.NS', '.BO')):
-            custom_ticker = f"{custom_ticker}.NS"
+        # Auto-add suffix if not present
+        if suffix and not any(custom_ticker.endswith(ext) for ext in [suffix, ".NS", ".BO", ".L", ".DE", ".T", ".TO", ".AX"]):
+            custom_ticker = f"{custom_ticker}{suffix}"
         if custom_ticker not in selected_tickers:
             selected_tickers.append(custom_ticker)
     
