@@ -201,9 +201,9 @@ if len(selected_tickers) > 1:
     )
     st.plotly_chart(fig, use_container_width=True)
 
-# --- DEEP DIVE MODE (Iterate through tickers) ---
+# --- SMART STOCK ANALYSIS (Iterate through tickers) ---
 st.markdown("---")
-st.header("🔎 Deep Dive Analysis")
+st.header("⚡ Smart Stock Analysis")
 
 tabs = st.tabs(selected_tickers)
 
