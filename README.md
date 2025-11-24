@@ -36,18 +36,6 @@
 
 ---
 
-## 🎬 Demo
-
-### Web Dashboard
-![SentiStock Dashboard](screenshots/dashboard.png)
-*Interactive dashboard showing stock prices and sentiment analysis*
-
-### Sentiment Analysis
-![Sentiment Analysis](screenshots/sentiment.png)
-*Real-time sentiment classification of financial news*
-
----
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -155,30 +143,17 @@ graph LR
 
 ---
 
-## 📸 Screenshots
-
-### Main Dashboard
-![Main Dashboard](screenshots/main.png)
-
-### Stock Price Chart
-![Price Chart](screenshots/chart.png)
-
-### Sentiment Breakdown
-![Sentiment Breakdown](screenshots/sentiment_breakdown.png)
-
----
-
 ## 🎯 Use Cases & Examples
 
 ### Example 1: Day Trading
-```python
+```bash
 # Quick sentiment check before market open
 python cli.py --ticker AAPL
 # Output: Bullish sentiment (0.72) - Positive news flow
 ```
 
 ### Example 2: Investment Research
-```python
+```bash
 # Analyze sentiment over past month
 python cli.py --ticker TSLA --days 30 --verbose
 # Output: Historical sentiment trends and correlation with price
