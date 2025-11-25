@@ -10,6 +10,11 @@
 
 ---
 
+## 🌐 Live Demo
+**🚀 Try the App**: [https://share.streamlit.io/AB0204/SentiStock-Analytics](https://share.streamlit.io/AB0204/SentiStock-Analytics)
+
+---
+
 ## ✨ Features
 
 ### 📊 **Real-Time Market Data**
