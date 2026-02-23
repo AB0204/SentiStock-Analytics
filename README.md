@@ -10,7 +10,7 @@
 
 [🚀 Live Demo](https://stock-agent-3pltsb8klfpsbzuukamwyd.streamlit.app/) | [📊 Methodology](#) | [🎥 Demo Video](#) | [💼 Portfolio](https://ab0204.github.io/Portfolio/)
 
-![SentiStock Dashboard](https://via.placeholder.com/800x400/065f46/10b981?text=SentiStock+Analytics+Platform)
+![SentiStock Dashboard](assets/sentistock-dashboard.png)
 
 ---
 
