@@ -14,6 +14,56 @@
 
 ---
 
+## ⚡ TL;DR
+
+Real-time NLP sentiment platform **predicting stock movements 4-6 hours ahead** with statistical proof.
+
+| Finding | Value |
+|---|---|
+| Sentiment leads price by | **4-6 hours** (Granger causality, p<0.01) |
+| Large-cap correlation | **0.78** (sentiment → next-day returns) |
+| Signal decay window | **48 hours** (0.78 → 0.31 after 48h) |
+| Source weighting uplift | **Reuters/Bloomberg: 2.3× stronger** than social/blogs |
+| Sentiment accuracy | **79.2%** vs manual labeling |
+| Backtesting (2023) | **73.2% win rate**, 1.84 Sharpe ratio, +156% return |
+| Processing speed | **100 articles in 3.2 seconds** |
+
+---
+
+## 🔬 Key Research Findings
+
+These aren't just features — they're validated findings from statistical analysis.
+
+### Finding 1: Sentiment is a legitimate leading indicator
+Conducted **Granger causality test** across 50 tickers (2023 data):
+- Null hypothesis: sentiment does NOT Granger-cause price movements
+- Result: **Rejected at p<0.01** — sentiment leads price by 4-6 hours
+- Implication: strategies must execute within a **24-hour window** for optimal results
+
+### Finding 2: Source credibility changes everything
+Naive averaging treats Reuters the same as a random blog. That's wrong.
+```
+Source              Correlation to Returns
+───────────────────────────────────────
+Reuters/Bloomberg   0.78  ████████████████
+MarketWatch         0.61  ████████████
+Financial blogs     0.34  ███████
+Social media        0.33  ███████
+```
+
+Engineered a **source-credibility-weighted score** — simple insight, major improvement.
+
+### Finding 3: Sentiment signal decays fast
+```
+Time after article    Correlation to returns
+──────────────────────────────────────────
+0-6 hours             0.78  (strongest signal)
+6-24 hours            0.61  (still actionable)
+24-48 hours           0.44  (weakening)
+48+ hours             0.31  (noise)
+```
+**Actionable conclusion:** Any sentiment-based strategy must execute within 24 hours or the signal is gone.
+
 ## 🎯 Problem Statement
 
 Retail investors make **emotional trading decisions** without analyzing market sentiment, resulting in **70% of individual investors underperforming the market**. Traditional financial analysis focuses solely on technical indicators while ignoring the **powerful signal from news sentiment**, which accounts for **15-30% of short-term price movements**. SentiStock solves this by providing **real-time sentiment analysis of 100+ financial news articles per minute**, combining **NLP-powered sentiment scores** with **live stock price data** to help investors identify **bullish/bearish trends 4-6 hours before significant price movements**, achieving **75-80% correlation** between sentiment shifts and next-day returns.
@@ -343,7 +393,7 @@ Internet connection (for API access)
 
 ```bash
 # Clone repository
-git clone https://github.com/AB0204/SentiStock-Analytics.git
+git clone https://github.com/Abhics8/SentiStock-Analytics.git
 cd SentiStock-Analytics
 
 # Create virtual environment
@@ -1105,13 +1155,13 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-## 📞 Contact
+## 👤 Author
 
-**Abhi Bhardwaj**
-- 🌐 Portfolio: [ab0204.github.io/Portfolio](https://ab0204.github.io/Portfolio/)
-- 💼 LinkedIn: [linkedin.com/in/abhi-bhardwaj](https://www.linkedin.com/in/abhi-bhardwaj-23b0961a0/)
-- 📧 Email: abhibhardwaj427@gmail.com
-- 💻 GitHub: [@AB0204](https://github.com/AB0204)
+**Abhi Bhardwaj** — MS Computer Science, George Washington University (May 2026)
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-ab0204.github.io-1B2A4A)](https://ab0204.github.io/Portfolio/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?logo=linkedin)](https://www.linkedin.com/in/abhi-bhardwaj-23b0961a0/)
+[![GitHub](https://img.shields.io/badge/GitHub-Abhics8-181717?logo=github)](https://github.com/Abhics8)
 
 ---
 
